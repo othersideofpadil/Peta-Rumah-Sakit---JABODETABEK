@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Peta Rumah Sakit Jabodetabek</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <!-- Leaflet CSS -->
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    />
+    <!-- Leaflet JavaScript -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <!-- Font Awesome untuk ikon -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body class="bg-gray-50">
+    <div class="flex flex-col md:flex-row">
+      <!-- Sidebar untuk filter dan kontrol pencarian -->
+      <div class="sidebar w-full md:w-1/4 bg-white shadow-lg z-10">
+        <div class="p-6">
+          <!-- Header aplikasi -->
+          <div class="mb-8">
+            <h1 class="text-2xl font-bold text-gray-800">
+              <i class="fas fa-hospital text-red-600 mr-2"></i>
+              Peta Rumah Sakit Jabodetabek
+            </h1>
+            <p class="text-gray-600 mt-2">
+              Temukan rumah sakit terdekat di wilayah Jakarta, Bogor, Depok,
+              Tangerang, dan Bekasi
+            </p>
+            <div class="mt-4 p-3 bg-blue-50 rounded-lg border border-blue-100">
+              <p class="text-sm text-blue-800 flex items-start">
+                <i class="fas fa-info-circle mr-2 mt-0.5"></i>
+                <span
+                  >Pilih lokasi di peta atau gunakan lokasi default Jakarta
+                  Pusat sebagai pusat pencarian.</span
+                >
+              </p>
+            </div>
+          </div>
+
+          <!-- Kontrol lokasi -->
+          <div class="mb-6 p-4 bg-gray-50 rounded-lg">
+            <h2 class="font-semibold text-gray-700 mb-3">Pusat Pencarian</h2>
+
+            <!-- Pilihan Wilayah Jabodetabek -->
+            <div class="mb-4">
+              <label class="block text-sm font-medium text-gray-700 mb-2">
+                <i class="fas fa-map-marked-alt mr-1"></i>
+                Pilih Wilayah
+              </label>
+              <select
+                id="location-select"
+                class="w-full p-2 border border-gray-300 rounded-md bg-white focus:ring-2 focus:ring-blue-500"
+              >
+                <option value="">-- Pilih Wilayah Jabodetabek --</option>
+                <option value="Jakarta Pusat" selected>Jakarta Pusat</option>
+                <option value="Jakarta Utara">Jakarta Utara</option>
+                <option value="Jakarta Selatan">Jakarta Selatan</option>
+                <option value="Jakarta Timur">Jakarta Timur</option>
+                <option value="Jakarta Barat">Jakarta Barat</option>
+                <option value="Bogor">Bogor</option>
+                <option value="Depok">Depok</option>
+                <option value="Tangerang">Tangerang</option>
+                <option value="Tangerang Selatan">Tangerang Selatan</option>
+                <option value="Bekasi">Bekasi</option>
+              </select>
+            </div>
+
+            <div class="border-t border-gray-300 pt-3 mb-3">
+              <p class="text-xs text-gray-500 mb-2">
+                Atau masukkan koordinat manual:
+              </p>
+              <div class="mb-3">
+                <label class="block text-sm font-medium text-gray-700 mb-2"
+                  >Latitude</label
+                >
+                <input
+                  type="number"
+                  id="latitude-input"
+                  step="0.000001"
+                  value="-6.2088"
+                  class="w-full p-2 border border-gray-300 rounded-md"
+                />
+              </div>
+              <div class="mb-3">
+                <label class="block text-sm font-medium text-gray-700 mb-2"
+                  >Longitude</label
+                >
+                <input
+                  type="number"
+                  id="longitude-input"
+                  step="0.000001"
+                  value="106.8456"
+                  class="w-full p-2 border border-gray-300 rounded-md"
+                />
+              </div>
+            </div>
+
+            <div class="flex space-x-2">
+              <button
+                id="use-default-btn"
+                class="flex-1 bg-blue-500 hover:bg-blue-600 text-white py-2 px-3 rounded-md text-sm transition"
+              >
+                <i class="fas fa-sync-alt mr-1"></i> Default
+              </button>
+              <button
+                id="use-map-center-btn"
+                class="flex-1 bg-green-500 hover:bg-green-600 text-white py-2 px-3 rounded-md text-sm transition"
+              >
+                <i class="fas fa-crosshairs mr-1"></i> Pusat Peta
+              </button>
+            </div>
+            <p class="text-xs text-gray-500 mt-3">
+              <i class="fas fa-lightbulb mr-1"></i>
+              Klik di peta untuk mengubah lokasi pusat pencarian
+            </p>
+          </div>
+
+          <!-- Pencarian Nama Rumah Sakit -->
+          <div class="mb-6">
+            <h2 class="font-semibold text-gray-700 mb-3">
+              <i class="fas fa-search mr-1"></i>
+              Cari Nama Rumah Sakit
+            </h2>
+            <input
+              type="text"
+              id="hospital-search"
+              placeholder="Contoh: RSUD, Siloam, Hermina..."
+              class="w-full p-2.5 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            />
+            <p class="text-xs text-gray-500 mt-2">
+              <i class="fas fa-info-circle mr-1"></i>
+              Kosongkan untuk menampilkan semua
+            </p>
+          </div>
+
+          <!-- Filter Tipe Rumah Sakit -->
+          <div class="mb-6">
+            <h2 class="font-semibold text-gray-700 mb-3">
+              <i class="fas fa-filter mr-1"></i>
+              Filter Tipe Rumah Sakit
+            </h2>
+            <select
+              id="hospital-type-filter"
+              class="w-full p-2.5 border border-gray-300 rounded-md bg-white focus:ring-2 focus:ring-blue-500"
+            >
+              <option value="all">Semua Tipe</option>
+              <option value="rsup">RSUP (Rumah Sakit Umum Pusat)</option>
+              <option value="rsud">RSUD (Rumah Sakit Umum Daerah)</option>
+              <option value="rsu">RSU (Rumah Sakit Umum)</option>
+              <option value="rsia">RSIA (Rumah Sakit Ibu & Anak)</option>
+              <option value="rs">RS (Rumah Sakit Swasta)</option>
+            </select>
+          </div>
+
+          <!-- Slider radius pencarian -->
+          <div class="mb-8">
+            <div class="flex justify-between items-center mb-2">
+              <h2 class="font-semibold text-gray-700">Radius Pencarian</h2>
+              <span id="radius-value" class="text-blue-600 font-bold"
+                >5 km</span
+              >
+            </div>
+            <input
+              type="range"
+              id="radius-slider"
+              min="1"
+              max="10"
+              value="5"
+              class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer slider"
+            />
+            <div class="flex justify-between text-xs text-gray-500 mt-1">
+              <span>1 km</span>
+              <span>10 km</span>
+            </div>
+          </div>
+
+          <!-- Tombol pencarian -->
+          <div class="mb-6">
+            <button
+              id="search-btn"
+              class="w-full bg-red-600 hover:bg-red-700 text-white font-semibold py-3 px-4 rounded-lg transition duration-200 flex items-center justify-center shadow-lg"
+            >
+              <i class="fas fa-hospital mr-2"></i>
+              Cari Rumah Sakit
+            </button>
+            <button
+              id="clear-filters-btn"
+              class="w-full mt-2 bg-gray-500 hover:bg-gray-600 text-white font-semibold py-2 px-4 rounded-lg transition duration-200 flex items-center justify-center"
+            >
+              <i class="fas fa-eraser mr-2"></i>
+              Reset Filter
+            </button>
+          </div>
+
+          <!-- Status hasil pencarian -->
+          <div class="mb-6" id="search-status">
+            <div class="p-4 bg-gray-50 rounded-lg">
+              <h3 class="font-semibold text-gray-700 mb-2">Status Pencarian</h3>
+              <div id="search-results-info" class="text-sm text-gray-600">
+                Klik "Cari Rumah Sakit" untuk memulai
+              </div>
+            </div>
+          </div>
+
+          <!-- Daftar hasil pencarian -->
+          <div id="results-container" class="hidden">
+            <h2 class="font-semibold text-gray-700 mb-3">Hasil Pencarian</h2>
+            <div
+              id="results-list"
+              class="space-y-3 max-h-80 overflow-y-auto pr-2"
+            >
+              <!-- Hasil pencarian akan muncul di sini -->
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Peta interaktif -->
+      <div class="map-container w-full md:w-3/4">
+        <div id="map" class="h-full w-full"></div>
+      </div>
+    </div>
+
+    <!-- Modal loading (tidak digunakan, loading ada di button) -->
+    <div id="loading-modal" class="hidden" style="display: none"></div>
+
+    <!-- Empty state template -->
+    <template id="empty-state-template">
+      <div class="text-center py-8">
+        <div class="text-gray-400 text-5xl mb-4">
+          <i class="fas fa-hospital"></i>
+        </div>
+        <h3 class="text-gray-600 font-semibold mb-2">
+          Tidak ditemukan rumah sakit
+        </h3>
+        <p class="text-gray-500 text-sm">
+          Coba ubah lokasi pencarian, filter, atau perbesar radius
+        </p>
+      </div>
+    </template>
+
+    <!-- Result item template -->
+    <template id="result-item-template">
+      <div
+        class="result-item p-3 bg-white border-2 border-red-200 rounded-lg hover:bg-red-50 hover:border-red-400 transition duration-150 shadow-sm"
+      >
+        <div
+          class="flex justify-between items-start cursor-pointer result-item-header"
+        >
+          <div class="flex-1">
+            <div class="flex items-center mb-1">
+              <i class="fas fa-hospital text-red-500 mr-2"></i>
+              <h4 class="font-semibold text-gray-800 text-sm result-name">
+                Nama Rumah Sakit
+              </h4>
+            </div>
+            <div class="flex items-center mt-1">
+              <span
+                class="result-type text-xs px-2 py-1 rounded-full bg-red-100 text-red-700 font-semibold mr-2"
+                >Tipe</span
+              >
+              <span class="result-distance text-xs text-gray-500">
+                <i class="fas fa-map-marker-alt mr-1"></i>
+                <span>0 km</span>
+              </span>
+            </div>
+          </div>
+          <i class="fas fa-chevron-right text-gray-400 text-sm"></i>
+        </div>
+        <p class="result-address text-xs text-gray-600 mt-2 mb-2">
+          Alamat rumah sakit
+        </p>
+        <a
+          href="#"
+          class="result-navigate-btn inline-block w-full bg-red-600 hover:bg-red-700 text-white text-center py-2 px-3 rounded-md transition duration-200 text-xs font-semibold mt-2"
+        >
+          <i class="fas fa-directions mr-1"></i>Navigasi ke Rumah Sakit
+        </a>
+      </div>
+    </template>
+
+    <!-- Configuration (load first) -->
+    <script src="config.js"></script>
+    <!-- Main JavaScript -->
+    <script src="app.js"></script>
+  </body>
+</html>

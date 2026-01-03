@@ -1,0 +1,308 @@
+/* ===========================
+   STYLE.CSS - PETA RUMAH SAKIT
+   ===========================
+   Styling custom untuk aplikasi peta rumah sakit Jabodetabek
+*/
+
+/* Variabel warna global untuk tema aplikasi */
+:root {
+  --primary-blue: #1e40af;
+  --secondary-blue: #3b82f6;
+  --primary-green: #10b981;
+  --light-green: #d1fae5;
+  --light-blue: #dbeafe;
+}
+
+/* ===========================
+   LAYOUT SIDEBAR & MAP
+   =========================== */
+/* Sidebar untuk kontrol pencarian */
+.sidebar {
+  height: 100vh;
+  overflow-y: auto;
+}
+
+/* Container peta mengambil seluruh tinggi viewport */
+.map-container {
+  height: 100vh;
+}
+
+/* ===========================
+   CUSTOM SCROLLBAR
+   =========================== */
+/* Styling scrollbar untuk sidebar */
+.sidebar::-webkit-scrollbar {
+  width: 8px;
+}
+
+.sidebar::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+.sidebar::-webkit-scrollbar-thumb {
+  background: var(--secondary-blue);
+  border-radius: 4px;
+}
+
+.sidebar::-webkit-scrollbar-thumb:hover {
+  background: var(--primary-blue);
+}
+
+/* ===========================
+   LEAFLET MAP FIX
+   =========================== */
+/* Fix ukuran tile peta Leaflet */
+.leaflet-tile-container img {
+  width: 256px !important;
+  height: 256px !important;
+}
+
+/* ===========================
+   LOADING ANIMATIONS
+   =========================== */
+/* Animasi spinner untuk button loading */
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.animate-spin {
+  animation: spin 1s linear infinite;
+}
+
+/* Loading ring animation (tidak digunakan saat ini) */
+.lds-ring {
+  display: inline-block;
+  position: relative;
+  width: 80px;
+  height: 80px;
+}
+
+.lds-ring div {
+  box-sizing: border-box;
+  display: block;
+  position: absolute;
+  width: 64px;
+  height: 64px;
+  margin: 8px;
+  border: 8px solid #ffffff;
+  border-radius: 50%;
+  animation: lds-ring 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
+  border-color: #ffffff transparent transparent transparent;
+}
+
+.lds-ring div:nth-child(1) {
+  animation-delay: -0.45s;
+}
+
+.lds-ring div:nth-child(2) {
+  animation-delay: -0.3s;
+}
+
+.lds-ring div:nth-child(3) {
+  animation-delay: -0.15s;
+}
+
+/* Keyframe untuk animasi ring */
+@keyframes lds-ring {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+/* Styling untuk loading modal (tidak digunakan, loading ada di button) */
+#loading-modal {
+  backdrop-filter: blur(4px);
+  animation: fadeIn 0.3s ease-in-out;
+  background-color: rgba(0, 0, 0, 0.85) !important;
+}
+
+#loading-modal > div {
+  animation: slideUp 0.4s ease-out;
+  background-color: #1f2937 !important;
+  color: white;
+}
+
+#loading-modal p {
+  color: #e5e7eb;
+}
+
+#loading-modal .text-gray-700 {
+  color: #ffffff !important;
+}
+
+#loading-modal .text-gray-500 {
+  color: #d1d5db !important;
+}
+
+#loading-modal .text-blue-600 {
+  color: #60a5fa !important;
+}
+
+/* Animasi fade in untuk modal */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* Animasi slide up untuk modal */
+@keyframes slideUp {
+  from {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+/* ===========================
+   SLIDER RADIUS
+   =========================== */
+/* Styling thumb slider untuk berbagai browser */
+.slider::-webkit-slider-thumb {
+  appearance: none;
+  height: 20px;
+  width: 20px;
+  border-radius: 50%;
+  background: var(--primary-blue);
+  cursor: pointer;
+}
+
+/* Styling slider untuk Firefox */
+.slider::-moz-range-thumb {
+  height: 20px;
+  width: 20px;
+  border-radius: 50%;
+  background: var(--primary-blue);
+  cursor: pointer;
+  border: none;
+}
+
+/* ===========================
+   LEAFLET POPUP STYLING
+   =========================== */
+/* Styling konten popup marker */
+.leaflet-popup-content {
+  font-family: system-ui, -apple-system, sans-serif;
+  min-width: 250px;
+  margin: 10px 15px;
+}
+
+/* Styling heading popup */
+.leaflet-popup-content h3 {
+  font-weight: 600;
+  font-size: 1.1rem;
+  margin-bottom: 8px;
+  color: #1f2937;
+}
+
+/* Styling paragraf dalam popup */
+.leaflet-popup-content p {
+  margin: 5px 0;
+  font-size: 0.9rem;
+  color: #4b5563;
+}
+
+.leaflet-popup-content a {
+  text-decoration: none;
+}
+
+/* Styling button navigasi Google Maps di popup */
+.leaflet-popup-content a[href*="google.com/maps"] {
+  display: block !important;
+  width: 100% !important;
+  background-color: #2563eb !important;
+  color: white !important;
+  text-align: center !important;
+  padding: 10px 16px !important;
+  border-radius: 8px !important;
+  font-weight: 600 !important;
+  font-size: 0.875rem !important;
+  margin-top: 8px !important;
+  box-shadow: 0 2px 4px rgba(37, 99, 235, 0.3) !important;
+}
+
+.leaflet-popup-content a[href*="google.com/maps"]:hover {
+  background-color: #1d4ed8 !important;
+  box-shadow: 0 4px 6px rgba(37, 99, 235, 0.4) !important;
+}
+
+/* Wrapper popup dengan border radius */
+.leaflet-popup-content-wrapper {
+  border-radius: 12px;
+  overflow: hidden;
+  background-color: #ffffff !important;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15) !important;
+  padding: 4px;
+}
+
+/* Styling tip/arrow popup */
+.leaflet-popup-tip {
+  background-color: #ffffff !important;
+}
+
+/* ===========================
+   CENTER MARKER
+   =========================== */
+/* Marker untuk pusat pencarian */
+.center-marker {
+  background: none;
+  border: none;
+}
+
+/* Icon dalam marker pusat */
+.center-marker-icon {
+  width: 24px;
+  height: 24px;
+  background-color: var(--primary-blue);
+  border-radius: 50%;
+  border: 3px solid white;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.center-marker-icon i {
+  color: white;
+  font-size: 10px;
+}
+
+/* ===========================
+   RESPONSIVE DESIGN
+   =========================== */
+/* Tampilan mobile/tablet */
+@media (max-width: 768px) {
+  .sidebar {
+    height: auto;
+    max-height: 50vh;
+  }
+
+  .map-container {
+    height: 50vh;
+  }
+}
+
+/* ===========================
+   INPUT NUMBER STYLING
+   =========================== */
+/* Hilangkan arrow pada input number */
+input[type="number"] {
+  appearance: textfield;
+}
+
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+  appearance: none;
+  margin: 0;
+}
