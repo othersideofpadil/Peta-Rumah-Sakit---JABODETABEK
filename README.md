@@ -2,10 +2,6 @@
 
 Aplikasi web berbasis GIS (Geographic Information System) untuk mencari dan menemukan rumah sakit terdekat di wilayah Jabodetabek (Jakarta, Bogor, Depok, Tangerang, Bekasi). Aplikasi ini memanfaatkan Geoapify Places API untuk mendapatkan data lokasi rumah sakit dan Leaflet.js untuk visualisasi peta interaktif.
 
-## 📸 Screenshot
-
-![Peta Rumah Sakit Jabodetabek](https://via.placeholder.com/800x400?text=Screenshot+Aplikasi)
-
 ## ✨ Fitur Utama
 
 ### 🗺️ Peta Interaktif
